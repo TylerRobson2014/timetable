@@ -1,0 +1,106 @@
+// index.js
+
+var express = require('express');
+var app = express();
+var server = require('http').createServer(app);
+var socketio = require('socket.io');
+
+
+app.use(express.static(__dirname + '/home/pi/www'));  
+app.get('/', function(req, res) {  
+    res.sendFile(__dirname + '/index.html');
+});
+
+server.listen(12345);
+
+var users = new Array();
+
+console.log("Starting");
+
+socketio.listen(server).on('connection', function (socket) {
+
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+    console.log("Connection from client");
+
+    socket.id = Math.floor(Math.random() * 1000);
+
+    console.log("socket : "+socket.id);
+
+    socket.on('userName', function (msg) {
+	UserID = socket.id;
+	console.log(socket.id);
+	console.log(msg);
+	for (var i=0; i < users.length; i++){
+		if (users[i].uName == msg){
+			msg = msg+"_2";
+		}
+	}
+        socket.broadcast.emit('message', msg + ' Has joined');
+	var userObject = {uID:UserID,uName:msg};
+	users.push(userObject);
+        socket.broadcast.emit('users', users);
+    });
+
+    socket.on('typing', function(msg) {
+	UserID = socket.id;
+	for (var i = 0; i< users.length;i++){
+		if (users[i].uID == socket.id){
+			var displayName = users[i].uName;
+		} 
+	}
+        socket.broadcast.emit('update',displayName);
+    });
+
+    socket.on('message', function (msg) {
+        console.log('Message Received: ', msg);
+	console.log(socket.id);
+	UserID = socket.id;
+	for (var i = 0; i< users.length;i++){
+		if (users[i].uID == socket.id){
+			var displayName = users[i].uName;
+		} 
+	}
+        socket.broadcast.emit('message', displayName + " : " + msg);
+    });
+
+    socket.on('plot', function (msg) {
+        console.log('Message Received: ', msg);
+	console.log(socket.id);
+	UserID = socket.id;
+	for (var i = 0; i< users.length;i++){
+		if (users[i].uID == socket.id){
+			var displayName = users[i].uName;
+		} 
+	}
+	msg.col = getRandomColor();
+	console.log("emit",msg.X,msg.Y,msg.col);
+        socket.broadcast.emit('draw', msg);
+    });
+
+
+    socket.on('disconnect', function () {
+	UserID = socket.id;
+	for (var i = 0; i< users.length;i++){
+		if (users[i].uID == socket.id){
+			var displayName = users[i].uName;
+			if (i > -1){
+				users.splice(i,1);
+			}
+		} 
+	}
+	console.log(displayName + " has left");
+        socket.broadcast.emit('message', displayName + " : has left");
+        socket.broadcast.emit('users', users);
+    });
+
+
+});

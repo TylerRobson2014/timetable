@@ -1,0 +1,144 @@
+    var timeTable = makeTable($('#timeDiv'), data);
+
+  $("#timeTable").on("click", "td", function() {
+    var col = $(this).parent().children().index($(this));
+    var row = $(this).parent().parent().children().index($(this).parent());
+    switch (col){
+      case 1:
+        day = "Monday";
+        break;
+      case 2:
+        day = "Tuesday";
+        break;
+      case 3:
+        day = "Wednesday";
+        break;
+      case 4:
+        day = "Thursday";
+        break;
+      case 5:
+        day = "Friday";
+        break;
+      case 6:
+        day = "Saturday";
+        break;
+      case 7:
+        day = "Sunday";
+        break;        
+    }
+    switch (row){
+      case 1:
+        tTime = "0600";
+        break;
+      case 2:
+        tTime = "0700";
+        break;
+      case 3:
+        tTime = "0800";
+        break;
+      case 4:
+        tTime = "0900";
+        break;
+      case 5:
+        tTime = "1000";
+        break;
+      case 6:
+        tTime = "1100";
+        break;
+      case 7:
+        tTime = "1200";
+        break;        
+    }
+    //alert(day);
+    $scope.ROW = row;
+    $scope.COL = col;
+    $scope.day = day;
+    $scope.tTime = tTime;
+    $scope.$applyAsync();
+    document.getElementById('id02').style.display='block';
+   });
+
+  $("#newEvent").submit(function(){
+    //alert( "Handler for .submit() called." );
+  });
+
+//});
+
+});
+
+  
+</script>
+
+
+<div class="planner">
+<p class="plannerTitle">Planner</p>
+
+<!-- auth was here -->
+
+<div class="controls">
+
+</div> <!-- controls -->
+<div class="plan">
+
+<div class="timeSlots" id="timeDiv">
+
+  <div id="id02" class="w3-modal controls">
+    <div class="w3-modal-content w3-card-8">
+      <header class="w3-container w3-teal">
+        <span onclick="document.getElementById('id02').style.display='none'" class="w3-closebtn">&times;</span>
+        <p>Add an event for {{day}} starting at {{tTime}}</p>
+      </header>
+
+      <div class="w3-container" style="font-size: 20px">
+	     <form class="w3-container" action="/newEvent" method="post" id="newEvent" enctype="multipart/form-data">
+	        <div class="w3-section">
+	          <label><b>Event</b></label>
+	          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter text" name="eventText" required>
+            <label><b>Day</b></label><br>
+            <input class="w3-input w3-border w3-margin-bottom" style="height: 50px" type="text" id="day" name="day" value='{{day}}'><br>
+            <label><b>Start time</b></label><br>
+            <select class="w3-input w3-border w3-margin-bottom" name="startTime">
+            <option value="0600">0600</option>
+            <option value="0700">0700</option>
+            <option value="0800">0800</option>
+            <option value="0900">0900</option>
+            <option value="1000">1000</option>
+            <option value="1100">1100</option>
+            <option value="1200">1200</option>
+            <option selected="selected">{{tTime}}</option></select><br>
+	          <label><b>End time</b></label><br>
+            <select class="w3-input w3-border w3-margin-bottom" name="endTime">
+            <option value="0600">0600</option>
+            <option value="0700">0700</option>
+            <option value="0800">0800</option>
+            <option value="0900">0900</option>
+            <option value="1000">1000</option>
+            <option value="1100">1100</option>
+            <option value="1200">1200</option>
+            </select>
+	          <label><b>Select a color</b></label><br>
+	          <input class="w3-input w3-border w3-margin-bottom" style="height: 50px" type="color" name="favcolor">
+	          <input class="w3-btn-block w3-green w3-section w3-padding" type="submit" value="Add">
+	          <!-- <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me -->
+	        </div>
+	      </form>
+
+	      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+	        <button onclick="document.getElementById('id02').style.display='none'" type="button" class="w3-btn w3-red">Cancel</button>
+	       <!-- <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span> -->
+	      </div>
+      </div>
+
+      <footer class="w3-container w3-teal">
+        <p>Click cancel or the X to close</p>
+      </footer>
+    </div>
+  </div>
+
+</div> <!-- Timeslots -->
+</div> <!-- plan -->
+</div> <!-- planner -->
+
+</body>
+
+</html>

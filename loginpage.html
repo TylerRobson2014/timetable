@@ -1,0 +1,143 @@
+<html>
+<header>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC:700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC:700|Courgette" rel="stylesheet">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+
+<style type="text/css">
+
+body {
+	//font-family: 'Nunito', sans-serif;
+	//font-family: 'Amatic SC', cursive;
+	font-family: 'Courgette', cursive;
+}
+
+button {
+	width: 200px;
+}
+.container {
+	height: 200px;
+	background-color: lightgrey;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align : center;
+	-moz-box-align    : center;
+	-ms-flex-align    : center;
+	-webkit-align-items : center;
+	align-items : center ;
+	justify-content : center;
+	-webkit-justify-content : center;
+	-webkit-box-pack : center;
+	-moz-box-pack : center;
+	-ms-flex-pack : center;
+	}
+
+.bot{
+	height: 100px;
+	background-color: grey;
+
+}
+
+
+</style>
+</header>
+<body>
+
+<script type="text/javascript">
+
+var cookies = document.cookie;
+
+console.log(cookies);
+
+</script>
+
+<div class="container">
+<br>
+<h1> Time Planner </h1>
+<br>
+<br>
+<br>
+<br>
+</div>
+<div class="container">
+
+<div class="w3-container">
+  <button onclick="document.getElementById('id01').style.display='block'" class="w3-btn w3-green w3-large" style="position: center;">Login</button>
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-8 w3-animate-zoom">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-closebtn w3-hover-red w3-container w3-padding-8 w3-display-topright" title="Close Modal">&times;</span>
+      <!-- <img src="img2.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top"> -->
+      </div>
+
+      <form class="w3-container" action="/login" method="post" id="login" enctype="multipart/form-data">
+        <div class="w3-section">
+          <label><b>Username</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="usrname" required>
+          <label><b>Password</b></label>
+          <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="psw" required>
+          <button class="w3-btn-block w3-green w3-section w3-padding" type="submit">Login</button>
+          <!-- <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me -->
+        </div>
+      </form>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+        <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-btn-block w3-red w3-section w3-padding">Cancel</button>
+       <!-- <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="w3-container">
+  <button onclick="document.getElementById('id03').style.display='block'" class="w3-btn w3-green w3-large" style="position: center;">Register</button>
+
+  <div id="id03" class="w3-modal">
+    <div class="w3-modal-content w3-card-8 w3-animate-zoom">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id03').style.display='none'" class="w3-closebtn w3-hover-red w3-container w3-padding-8 w3-display-topright" title="Close Modal">&times;</span>
+      <!-- <img src="img2.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top"> -->
+      </div>
+
+      <form class="w3-container" action="/register" method="post" id="register" enctype="multipart/form-data">
+        <div class="w3-section">
+          <label><b>Username</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="usrname" required>
+          <label><b>Password</b></label>
+          <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="psw" required>
+          <label><b>Repeat Password</b></label>
+          <input class="w3-input w3-border" type="password" placeholder="Repeat Password" name="psw" required>
+          <button class="w3-btn-block w3-green w3-section w3-padding" type="submit">Register</button>
+          <!-- <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me -->
+        </div>
+      </form>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+        <button onclick="document.getElementById('id03').style.display='none'" type="button" class="w3-btn-block w3-red w3-section w3-padding">Cancel</button>
+       <!-- <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div> <!-- container -->
+<div class="bot">
+</div>
+
+
+</body>
+</html>

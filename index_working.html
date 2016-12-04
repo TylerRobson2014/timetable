@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script> 
+
+    <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
+
+<style>
+body {
+    background: lightblue;
+}
+
+input {
+        height: 50px;
+        position: relative;
+       // border: 2px solid #cdcdcd;
+       // border-color: rgba(0,0,0,.14);
+        border: none;
+        background-color: AliceBlue ;   ;
+        font-size: 14px;
+        font-family: 'Rock Salt', cursive;
+}
+
+li {
+    list-style-type: none;
+    font-size: 15px;
+    font-family: 'Rock Salt', cursive;
+    color: #fff;
+    background-color: #414141;
+    font-weight: bold;
+    display: block;
+    position: relative;
+    padding: 16px 0 16px 10px;
+    margin: 5px 0 5px 5px;
+}
+
+button {
+   //border: 1px solid #0a3c59;
+   border: none;
+   background: #3e779d;
+   background: -webkit-gradient(linear, left top, left bottom, from(#65a9d7), to(#3e779d));
+   background: -webkit-linear-gradient(top, #65a9d7, #3e779d);
+   background: -moz-linear-gradient(top, #65a9d7, #3e779d);
+   background: -ms-linear-gradient(top, #65a9d7, #3e779d);
+   background: -o-linear-gradient(top, #65a9d7, #3e779d);
+   background-image: -ms-linear-gradient(top, #65a9d7 0%, #3e779d 100%);
+   padding: 10.5px 21px;
+   -webkit-border-radius: 6px;
+   -moz-border-radius: 6px;
+   border-radius: 6px;
+   -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+   -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+   box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+   text-shadow: #7ea4bd 0 1px 0;
+   color: #06426c;
+   font-family: 'Rock Salt', cursive;
+   font-size: 14px;
+   text-decoration: none;
+   vertical-align: middle;
+   width: 100px;
+   }
+button:hover {
+   //border: 1px solid #0a3c59;
+   border: none;
+   text-shadow: #1e4158 0 1px 0;
+   background: #3e779d;
+   background: -webkit-gradient(linear, left top, left bottom, from(#65a9d7), to(#3e779d));
+   background: -webkit-linear-gradient(top, #65a9d7, #3e779d);
+   background: -moz-linear-gradient(top, #65a9d7, #3e779d);
+   background: -ms-linear-gradient(top, #65a9d7, #3e779d);
+   background: -o-linear-gradient(top, #65a9d7, #3e779d);
+   background-image: -ms-linear-gradient(top, #65a9d7 0%, #3e779d 100%);
+   color: #fff;
+   }
+button:active {
+   text-shadow: #1e4158 0 1px 0;
+   //border: 1px solid #0a3c59;
+   border: none;
+   background: #65a9d7;
+   background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#3e779d));
+   background: -webkit-linear-gradient(top, #3e779d, #65a9d7);
+   background: -moz-linear-gradient(top, #3e779d, #65a9d7);
+   background: -ms-linear-gradient(top, #3e779d, #65a9d7);
+   background: -o-linear-gradient(top, #3e779d, #65a9d7);
+   background-image: -ms-linear-gradient(top, #3e779d 0%, #65a9d7 100%);
+   color: #fff;
+   }
+
+label {font-family: 'Rock Salt', cursive;}
+
+</style>
+
+    <script>
+
+	var app = angular.module('myApp', []);
+	console.log("Defined App");
+
+	app.service('socket', function() {
+
+        var iosocket = io.connect();
+
+	console.log("In the SERVICE");
+
+	this.connect = function(callback){
+		console.log("CONNECT");
+		return iosocket.on('connect', callback);
+		};
+	this.disconnect = function(scope,callback){
+		console.log("DISCONNECT");
+		$scope.status = "DISCONNECTED";
+		return iosocket.on('disconnect', callback);
+		};
+	this.on = function(eventname,callback){
+		console.log("CONNECTION "+eventname);
+		return iosocket.on(eventname, callback);
+		};
+	this.listen = function(scope,callback){
+		console.log("READ");
+		return iosocket.on('message', callback);
+		};
+	this.send = function(scope,data){
+		console.log("SEND");
+		return iosocket.send(data);
+		};
+	});
+
+        app.controller('statusCtrl', function($scope, socket) {
+	console.log("In the statusC controller");
+
+	var iosocket = io.connect();
+
+	$scope.status = "DISCONNECTED";
+
+//	socket.connect(function(){
+	iosocket.on('connect',function(){
+		$scope.status = "CONNECTED";
+		$scope.$apply();
+
+		console.log("Status = "+$scope.status);
+
+		iosocket.on('disconnect',function(){
+			$scope.status = "DISCONNECTED";
+			$scope.$apply();
+		});
+
+	        $scope.sendUN = function(message){
+			iosocket.send('User: '+message);
+			$scope.userName = message;
+			$scope.$apply();}
+
+		iosocket.on('message',function(message){
+			$scope.items.push(message);
+			$scope.$apply();
+			console.log(message);		
+
+		});
+
+
+		console.log("In the addtoList controller");
+  		$scope.items = [];
+  		$scope.AddItem = function() {
+			console.log("Sending item");
+			iosocket.send($scope.newItem);
+			$scope.newItem = "";
+			$scope.$apply();
+  			};
+	});
+	});
+
+    </script>
+
+</head>
+<body ng-app="myApp" ng-controller="statusCtrl">
+<div class="status">
+<label class="statusLab">Status: {{status}}</label>
+</div>
+<br>
+<br>
+<div class="uName"> 
+<label class="uNameLab">Enter your username first:</label>
+<br>
+<input type="text" ng-model="userName"/>
+<button ng-click="sendUN(userName)">Enter</button>
+</div>
+<br>
+<br>
+<div class="mName">
+<label class="mNameLab">My Name: {{userName}}</label>
+</div>
+<br>
+<br>
+<div class="chat">
+<label class="chatLab">Chat:</label>
+  <br>
+  <input type="text" ng-model="newItem"> <button ng-click="AddItem()">Send</button>
+  <br>
+  <ul class="a">
+    <li ng-repeat="item in items">{{item}}</li>
+  </ul>
+</div> 
+</body>
+
+</html>

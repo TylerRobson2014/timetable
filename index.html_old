@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script> 
+
+    <script>
+
+        $(function(){
+
+            var iosocket = io.connect();
+
+            iosocket.on('connect', function () {
+
+                $('#incomingChatMessages').append($('<li>Connected</li>'));
+
+                iosocket.on('message', function(message) {
+
+                    $('#incomingChatMessages').append($('<li></li>').text(message));
+
+                });
+
+                iosocket.on('disconnect', function() {
+
+                    $('#incomingChatMessages').append('<li>Disconnected</li>');
+
+                });
+
+            });
+
+
+            $('#userName').keypress(function(event) {
+
+                if(event.which == 13) {
+
+                    event.preventDefault();
+
+                    iosocket.send('User:'+$('#userName').val());
+
+                    $('#myName').append($('<li></li>').text($('#userName').val()));
+
+                    $('#userName').val('');
+
+                }
+
+            });
+
+
+
+            $('#outgoingChatMessage').keypress(function(event) {
+
+                if(event.which == 13) {
+
+                    event.preventDefault();
+
+                    iosocket.send($('#outgoingChatMessage').val());
+
+                   // $('#incomingChatMessages').append($('<li></li>').text($('#outgoingChatMessage').val()));
+
+                    $('#outgoingChatMessage').val('');
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+</head>
+
+<body>
+Enter your username first:
+<br>
+<input type="text" id="userName">
+<br>
+My Name: <ul id="myName"></ul>
+<br>
+Incoming Chat: <ul id="incomingChatMessages"></ul>
+<br />
+<input type="text" id="outgoingChatMessage">
+</body>
+</html>
